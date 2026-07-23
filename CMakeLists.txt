@@ -43,4 +43,4 @@ add_subdirectory(src/core)
 add_subdirectory(src/curlyengine)
 
 #--- Games ---
-add_subdirectory(src/esm)
+add_subdirectory(src/curlydemo)

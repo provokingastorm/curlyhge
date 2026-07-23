@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef ESMGameSubsystem_H_
-#define ESMGameSubsystem_H_
+#ifndef DemoGameSubsystem_H_
+#define DemoGameSubsystem_H_
 
 #ifndef EngineSubsystem_H_
 #include "enginesubsystem.h"
@@ -11,13 +11,13 @@
 #include "hgevector.h"
 
 // ----------------------------------------------------------------------------
-// ESMGameSubsystem - Declaration
+// DemoGameSubsystem - Declaration
 // ----------------------------------------------------------------------------
 
-class ESMGameSubsystem : public EngineSubsystem
+class DemoGameSubsystem : public EngineSubsystem
 {
 public:
-    DECLARE_SUBSYSTEM(ESMGameSubsystem);
+    DECLARE_SUBSYSTEM(DemoGameSubsystem);
 
     // --------------------------------------------------------
     //	EngineSubsystem inherited methods
@@ -33,17 +33,6 @@ private:
     void ShutdownInternal();
     void Tick(float DeltaTime);
     void Render();
-
-    hgeQuad PlayableAreaQuad;
-    hgeQuad FloorQuad;
-    hgeQuad NetQuad;
-
-    class hgeSprite* PlayerSlime;
-
-    hgeVector PlayerSlimeLocation;
-    hgeVector PlayerSlimeVelocity;
-
-    HTEXTURE PlayerSlimeHandle;
 };
 
 #endif

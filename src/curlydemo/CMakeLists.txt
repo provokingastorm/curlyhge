@@ -1,10 +1,10 @@
-project(ESM)
+project(CURLYDEMO)
 cmake_minimum_required(VERSION 2.8)
 
 #------ sources ------
-set( ESM_SRC
-    esmgamesubsystem.cpp
-    esmgamesubsystem.h
+set( CURLYDEMO_SRC
+    demogamesubsystem.cpp
+    demogamesubsystem.h
     )
 
 #------ additional includes ------
@@ -23,8 +23,8 @@ link_libraries(curlyengine)
 
 
 #------ target -----
-add_executable( esm WIN32 ${ESM_SRC} )
+add_executable( curlydemo WIN32 ${CURLYDEMO_SRC} )
 
 if( MSVC )
-    SET_TARGET_PROPERTIES( esm PROPERTIES LINK_FLAGS "/NODEFAULTLIB:libci" )
+    SET_TARGET_PROPERTIES( curlydemo PROPERTIES LINK_FLAGS "/NODEFAULTLIB:libci" )
 endif()
