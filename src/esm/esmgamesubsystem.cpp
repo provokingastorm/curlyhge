@@ -1,6 +1,5 @@
 #include "esmgamesubsystem.h"
 #include "curlyengine.h"
-#include "sharedrenderables.h"
 #include "hgesprite.h"
 
 
@@ -26,6 +25,9 @@ void ESMGameSubsystem::InitializeGameEngine()
 
 void ESMGameSubsystem::InitializeInternal()
 {
+    FloorQuad = {};
+    NetQuad = {};
+
     const int ScreenWidth = CurlyEngine::Instance().GetScreenWidth();
     const int ScreenHeight = CurlyEngine::Instance().GetScreenHeight();
 
@@ -53,13 +55,6 @@ void ESMGameSubsystem::InitializeInternal()
 
     PlayableAreaQuad.blend = (hgeBlendMode)(BLEND_DEFAULT);
 
-    // Setup the rendering of the playable area
-    PlayableAreaRenderable = new RenderedQuad();
-    PlayableAreaRenderable->SetContent(PlayableAreaQuad);
-
-    FloorQuad = {};
-    NetQuad = {};
-
     // Setup the floor quad
     const float FloorTopY = PlayableAreaQuad.v[3].y - (PlayableAreaHeight * 0.2f);
     FloorQuad.v[0].x = PlayableAreaQuad.v[0].x;
@@ -78,9 +73,6 @@ void ESMGameSubsystem::InitializeInternal()
     }
 
     FloorQuad.blend = (hgeBlendMode)(BLEND_DEFAULT);
-
-    FloorRenderable = new RenderedQuad();
-    FloorRenderable->SetContent(FloorQuad);
 
     // Setup the net
     const float NetWidth = 4.0f;
@@ -105,9 +97,6 @@ void ESMGameSubsystem::InitializeInternal()
 
     NetQuad.blend = (hgeBlendMode)(BLEND_DEFAULT);
 
-    NetRenderable = new RenderedQuad();
-    NetRenderable->SetContent(NetQuad);
-
     PlayerSlimeHandle = CurlyEngine::Instance().GetHGE().Texture_Load("esm/art/SlimeTest.png");
 
     if (PlayerSlimeHandle)
@@ -122,84 +111,39 @@ void ESMGameSubsystem::InitializeInternal()
             const float LeftCourtDistance = (NetQuad.v[0].x - FloorQuad.v[0].x) * 0.5f;
             PlayerSlimeLocation.x = LeftCourtDistance + FloorQuad.v[0].x - (PlayerSlimeWidth * 0.5f);
             PlayerSlimeLocation.y = NetQuad.v[3].y - PlayerSlimeHeight;
-
-            PlayerSlimeStaticImage = new StaticImage();
-            PlayerSlimeStaticImage->SetContent(*PlayerSlime);
         }
     }
 }
 
 void ESMGameSubsystem::ShutdownInternal()
 {
-    if (FloorRenderable != NULL)
-    {
-        delete FloorRenderable;
-        FloorRenderable = NULL;
-    }
-
-    if (NetRenderable != NULL)
-    {
-        delete NetRenderable;
-        NetRenderable = NULL;
-    }
-
     if (PlayerSlime != NULL)
     {
         delete PlayerSlime;
         PlayerSlime = NULL;
     }
-
-    if (PlayerSlimeStaticImage != NULL)
-    {
-        delete PlayerSlimeStaticImage;
-        PlayerSlimeStaticImage = NULL;
-    }
-
-    if (PlayableAreaRenderable != NULL)
-    {
-        delete PlayableAreaRenderable;
-        PlayableAreaRenderable = NULL;
-    }
 }
 
 void ESMGameSubsystem::Tick(float DeltaTime)
 {
-    if (PlayableAreaRenderable != NULL)
-    {
-        CurlyEngine::Instance().AddToRenderQueue(*PlayableAreaRenderable);
-    }
-
-    PlayerSlimeStaticImage->SetHotSpot(PlayerSlimeLocation.x, PlayerSlimeLocation.y);
-
-    if (FloorRenderable != NULL)
-    {
-        CurlyEngine::Instance().AddToRenderQueue(*FloorRenderable);
-    }
-
-    if (NetRenderable != NULL)
-    {
-        CurlyEngine::Instance().AddToRenderQueue(*NetRenderable);
-    }
-
-    if (PlayerSlimeStaticImage != NULL)
-    {
-        CurlyEngine::Instance().AddToRenderQueue(*PlayerSlimeStaticImage);
-    }
 }
 
 void ESMGameSubsystem::Render()
 {
-    /*HGE& HGERef = GetHGE();
+    HGE& HGERef = CurlyEngine::Instance().GetHGE();
     HGERef.Gfx_BeginScene();
     HGERef.Gfx_Clear(0);
 
+    HGERef.Gfx_RenderQuad(&PlayableAreaQuad);
+    HGERef.Gfx_RenderQuad(&FloorQuad);
+    HGERef.Gfx_RenderQuad(&NetQuad);
 
-    HGERef.Gfx_RenderQuad(PlayableAreaQuad);
+    if (PlayerSlime != NULL)
+    {
+        PlayerSlime->RenderEx(PlayerSlimeLocation.x, PlayerSlimeLocation.y, 0.0f);
+    }
 
     HGERef.Gfx_EndScene();
-
-    // Clear the render queue so that we don't draw unwanted graphics
-    RenderQueue.clear();*/
 }
 
 // EOF

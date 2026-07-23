@@ -34,8 +34,6 @@ public:
     //	Rendering Methods
 
     void Render();
-    // Returns true if the object was added to the render queue; false, otherwise.
-    bool AddToRenderQueue(class IRenderable& RenderableObject);
 
     void OnFocusGained();
     void OnFocusLost();
@@ -69,7 +67,6 @@ private:
     class HGE* HGEEngine;
     class hgeResourceManager* ResourceManager;
 
-    std::vector<class IRenderable*> RenderQueue;
     std::vector<class EngineSubsystem*> Subsystems;
 
     // Tick

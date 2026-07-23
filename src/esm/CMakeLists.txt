@@ -5,8 +5,6 @@ cmake_minimum_required(VERSION 2.8)
 set( ESM_SRC
     esmgamesubsystem.cpp
     esmgamesubsystem.h
-    esmrenderables.cpp
-    esmrenderables.h
     )
 
 #------ additional includes ------

@@ -1,6 +1,5 @@
 #include "curlyengine.h"
 #include "enginesubsystem.h"
-#include "irenderable.h"
 #include "debugutilities.h"
 #include "curlycore.h"
 #include "hgeresource.h"
@@ -113,9 +112,6 @@ void CurlyEngine::Initialize(char* InGameName, char* InGameShortName)
 
 void CurlyEngine::Shutdown()
 {
-    // No need to delete render queue items. It's temp
-    RenderQueue.~vector();
-
     SAFE_DELETE_ARRAY(GameShortName);
 
     const unsigned int NumSubsystems = Subsystems.size();
@@ -184,22 +180,11 @@ bool CurlyEngine::Tick()
 
 void CurlyEngine::Render()
 {
-    HGE& HGERef = GetHGE();
-    HGERef.Gfx_BeginScene();
-    HGERef.Gfx_Clear(0);
-
-    // Render each object sequentially. Assumes that the client managed 
-    // the render order when adding objects to the render queue.
-    const int NumRenderables = RenderQueue.size();
-    for (int i = 0; i < NumRenderables; ++i)
+    const int NumSubsystem = Subsystems.size();
+    for (int i = 0; i < NumSubsystem; ++i)
     {
-        RenderQueue[i]->Render(HGERef);
+        Subsystems[i]->Render();
     }
-
-    HGERef.Gfx_EndScene();
-
-    // Clear the render queue so that we don't draw unwanted graphics
-    RenderQueue.clear();
 }
 
 void CurlyEngine::OnFocusGained()
@@ -302,13 +287,6 @@ bool CurlyEngine::AddEngineSubsystem(EngineSubsystem& Subsystem)
     }
 
     return bAdded;
-}
-
-// Returns true if the object was added to the render queue; false, otherwise.
-bool CurlyEngine::AddToRenderQueue(IRenderable& RenderableObject)
-{
-    RenderQueue.push_back(&RenderableObject);
-    return true;
 }
 
 // EOF

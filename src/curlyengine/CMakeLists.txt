@@ -13,10 +13,7 @@ set( CURLY_ENGINE_SRC
 	enginesubsystem.h
 	gamesession.cpp
 	gamesession.h
-	irenderable.h
 	launch.cpp
-	sharedrenderables.cpp
-	sharedrenderables.h
 	vector2d.cpp
 	vector2d.h
     )
