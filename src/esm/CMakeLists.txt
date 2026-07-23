@@ -3,8 +3,6 @@ cmake_minimum_required(VERSION 2.8)
 
 #------ sources ------
 set( ESM_SRC
-	esmgameinstance.cpp
-	esmgameinstance.h
     esmgamesubsystem.cpp
     esmgamesubsystem.h
     esmrenderables.cpp
